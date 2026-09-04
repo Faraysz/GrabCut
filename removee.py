@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """
-Background Remover - Versi Simple (model ringan: u2net, ~176MB)
-==================================================================
+Background Remover - Versi Simple
+===================================
 Tinggal jalankan, nanti diminta nama file lewat terminal.
 Atau langsung: python bg_remover_simple.py nama_foto.jpg
-
-PENTING: script ini memaksa pakai model "u2net" (~176MB),
-BUKAN model default rembg terbaru (bria-rmbg-2.0, ~1GB) yang lambat.
 
 Instalasi (sekali saja, butuh internet):
     pip install rembg onnxruntime pillow --break-system-packages
@@ -16,10 +13,10 @@ import os
 import sys
 
 try:
-    from rembg import remove, new_session
+    from rembg import remove
 except ImportError:
     print("Library belum terinstall. Jalankan dulu:")
-    print("pip install rembg onnxruntime pillow --break-system-packages")
+    print("  pip install rembg onnxruntime pillow --break-system-packages")
     sys.exit(1)
 
 
@@ -38,14 +35,11 @@ def main():
     name_no_ext = os.path.splitext(input_path)[0]
     output_path = f"{name_no_ext}_nobg.png"
 
-    print("Memuat model u2net...")
-    session = new_session("u2net")
-
-    print("Memproses...")
+    print("Memproses, mohon tunggu...")
     with open(input_path, "rb") as f:
         input_bytes = f.read()
 
-    output_bytes = remove(input_bytes, session=session)
+    output_bytes = remove(input_bytes)
 
     with open(output_path, "wb") as f:
         f.write(output_bytes)
